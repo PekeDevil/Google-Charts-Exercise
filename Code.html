@@ -1,0 +1,46 @@
+<html>
+  <head>
+   <title>[DESIRED TAB NAME]</title>
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+     var jsonData
+     function myCallback(dataWeGotViaJsonp) {
+       jsonData = dataWeGotViaJsonp['feeds'];
+     };
+   </script> 
+
+   <script type="text/javascript" src="[GET A CHANNEL FEED]&callback=myCallback"></script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+   
+     function drawChart() {
+       var data = new google.visualization.DataTable();
+       data.addColumn('datetime','Time');
+       data.addColumn('number','CPU');
+       data.addColumn('number','RAM');
+       for(var i=0; i<jsonData.length; i++) {
+         var timestamp = jsonData[i]['created_at'];
+         var [VARIABLE FIELD 01]= jsonData[i]['field1'];
+         var [VARIABLE FIELD 02]= jsonData[i]['field2'];
+         data.addRow([new Date(timestamp), parseFloat([VARIABLE FIELD 01]), parseFloat([VARIABLE FIELD 02])]);
+       };
+  
+       var options = {
+         title: 'Computer performance', legend: {position: 'bottom'},
+         curveType: 'function', colors: ['red','blue'],
+         series: {0: {targetAxisIndex:0},1:{targetAxisIndex:1}},
+         vAxes: {0: {title: '%CPU'},1:{title: '%RAM'}}
+       };    
+  
+       var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+       chart.draw(data,options);
+     }
+
+   </script>
+ </head>
+ <body>
+    <div id="curve_chart">
+</div>
+</body>
+</html>
